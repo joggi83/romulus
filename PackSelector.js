@@ -2,91 +2,100 @@ const PackSelector = () => {
   const [selectedInternet, setSelectedInternet] = React.useState(0);
   const [selectedMobile, setSelectedMobile] = React.useState(0);
 
-  // Add scoped styles
   React.useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
       .pack-selector-container {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 40px 20px;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: #ffffff;
       }
       
       .pack-selector-grid {
         display: grid;
-        grid-template-columns: 2fr 0.5fr 2fr 0.5fr 1fr;
-        gap: 20px;
+        grid-template-columns: 2fr 0.8fr 2fr 0.8fr 1.2fr;
+        gap: 30px;
         align-items: center;
       }
 
       .section-title {
         color: #ffffff;
-        font-size: 18px;
-        margin-bottom: 16px;
-        font-weight: 500;
+        font-size: 28px;
+        margin-bottom: 24px;
+        font-weight: 700;
+        text-align: center;
       }
       
       .pack-card {
         background: #161616;
-        border-radius: 8px;
-        padding: 24px;
-        height: 400px;
+        border-radius: 16px;
+        padding: 32px;
+        height: 460px;
         position: relative;
         border: 1px solid #333333;
+        display: flex;
+        flex-direction: column;
       }
       
       .pack-header {
-        background: #232323;
-        color: white;
-        padding: 12px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        font-weight: 500;
+        background: #FFCD0B;
+        color: black;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
       }
       
       .pack-title {
-        font-size: 20px;
-        font-weight: 500;
-        margin-bottom: 20px;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 24px;
         color: #ffffff;
+        text-align: center;
       }
       
       .pack-features {
-        margin-bottom: 20px;
+        margin-bottom: 32px;
       }
       
       .pack-features li {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         color: #cccccc;
-        font-size: 14px;
+        font-size: 16px;
       }
       
       .pack-features li:before {
         content: "•";
-        margin-right: 8px;
+        margin-right: 12px;
         color: #FF6600;
+        font-size: 20px;
       }
       
       .pack-price {
-        font-size: 28px;
-        font-weight: 500;
+        font-size: 36px;
+        font-weight: 700;
         color: #FF6600;
+        text-align: center;
+        margin-top: auto;
       }
       
       .pack-price-period {
-        font-size: 16px;
+        font-size: 18px;
         color: #cccccc;
+        font-weight: normal;
       }
       
       .pack-promo {
-        font-size: 14px;
-        margin-top: 8px;
+        font-size: 16px;
+        margin-top: 12px;
         color: #cccccc;
+        text-align: center;
       }
       
       .nav-button {
@@ -96,8 +105,8 @@ const PackSelector = () => {
         background: #232323;
         border: none;
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         cursor: pointer;
         display: flex;
@@ -105,6 +114,7 @@ const PackSelector = () => {
         justify-content: center;
         color: #ffffff;
         transition: background-color 0.3s;
+        font-size: 24px;
       }
 
       .nav-button:hover {
@@ -112,57 +122,63 @@ const PackSelector = () => {
       }
       
       .nav-button-left {
-        left: -20px;
+        left: -24px;
       }
       
       .nav-button-right {
-        right: -20px;
+        right: -24px;
       }
       
       .operator {
-        font-size: 32px;
-        font-weight: 500;
+        font-size: 48px;
+        font-weight: 700;
         text-align: center;
         color: #ffffff;
       }
       
       .total-card {
         background: #161616;
-        border-radius: 8px;
-        padding: 24px;
+        border-radius: 16px;
+        padding: 32px;
         border: 1px solid #333333;
       }
       
       .total-header {
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: 20px;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 24px;
         color: #ffffff;
+        text-align: center;
       }
       
       .total-discount {
-        font-size: 28px;
-        font-weight: 500;
+        font-size: 36px;
+        font-weight: 700;
         color: #FF6600;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        text-align: center;
       }
       
       .total-price {
-        font-size: 28px;
-        font-weight: 500;
+        font-size: 36px;
+        font-weight: 700;
         color: #FF6600;
+        text-align: center;
       }
       
       .total-details {
-        font-size: 14px;
-        margin-top: 8px;
+        font-size: 16px;
+        margin-top: 12px;
         color: #cccccc;
+        text-align: center;
       }
 
       .total-label {
-        font-weight: 500;
-        margin-bottom: 8px;
+        font-weight: 700;
+        margin-bottom: 12px;
         color: #ffffff;
+        text-align: center;
+        font-size: 18px;
       }
       
       @media (max-width: 768px) {
@@ -173,6 +189,11 @@ const PackSelector = () => {
         .operator {
           margin: 20px 0;
         }
+
+        .pack-card {
+          height: auto;
+          min-height: 460px;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -182,7 +203,6 @@ const PackSelector = () => {
     };
   }, []);
 
-  // Rest of your component code remains the same
   const internetPlans = [
     {
       name: "Livebox Découverte Fibre",

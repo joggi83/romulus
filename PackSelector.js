@@ -1,9 +1,153 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
 const PackSelector = () => {
-  const [selectedInternet, setSelectedInternet] = useState(0);
-  const [selectedMobile, setSelectedMobile] = useState(0);
+  const [selectedInternet, setSelectedInternet] = React.useState(0);
+  const [selectedMobile, setSelectedMobile] = React.useState(0);
+
+  // Add scoped styles
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .pack-selector-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: inherit;
+      }
+      
+      .pack-selector-grid {
+        display: grid;
+        grid-template-columns: 2fr 0.5fr 2fr 0.5fr 1fr;
+        gap: 20px;
+        align-items: center;
+      }
+      
+      .pack-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 24px;
+        height: 400px;
+        position: relative;
+      }
+      
+      .pack-header {
+        background: black;
+        color: white;
+        padding: 8px;
+        border-radius: 4px;
+        margin-bottom: 16px;
+      }
+      
+      .pack-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      
+      .pack-features {
+        margin-bottom: 16px;
+      }
+      
+      .pack-features li {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-start;
+      }
+      
+      .pack-features li:before {
+        content: "•";
+        margin-right: 8px;
+      }
+      
+      .pack-price {
+        font-size: 24px;
+        font-weight: bold;
+      }
+      
+      .pack-price-period {
+        font-size: 14px;
+      }
+      
+      .pack-promo {
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      
+      .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .nav-button-left {
+        left: -20px;
+      }
+      
+      .nav-button-right {
+        right: -20px;
+      }
+      
+      .operator {
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+      }
+      
+      .total-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 24px;
+      }
+      
+      .total-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      
+      .total-discount {
+        font-size: 24px;
+        font-weight: bold;
+        color: #F16E00;
+        margin-bottom: 16px;
+      }
+      
+      .total-price {
+        font-size: 24px;
+        font-weight: bold;
+      }
+      
+      .total-details {
+        font-size: 14px;
+        margin-top: 4px;
+      }
+      
+      @media (max-width: 768px) {
+        .pack-selector-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .operator {
+          margin: 20px 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const internetPlans = [
     {
@@ -57,119 +201,79 @@ const PackSelector = () => {
   const regularTotalPrice = selectedInternetPlan.regularPrice + selectedMobilePlan.price - selectedMobilePlan.discount;
 
   const PlanCard = ({ plan, isInternet }) => (
-    <div className="bg-white rounded-lg shadow-md p-6 h-96">
-      <div className="bg-black text-white p-2 rounded mb-4">
-        <h4 className="text-sm font-bold">{isInternet ? "L'essentiel de la Fibre" : "Le mobile à prix attractif"}</h4>
-      </div>
-      
-      <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
-      
-      <ul className="mb-4 text-sm space-y-2">
-        {plan.features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <span className="mr-2">•</span>
-            {feature}
-          </li>
-        ))}
-      </ul>
-      
-      <div className="mt-auto">
-        <div className="flex items-baseline">
-          <span className="text-3xl font-bold">{plan.price.toFixed(2)}€</span>
-          <span className="text-sm ml-1">/mois</span>
-        </div>
-        {isInternet && (
-          <p className="text-sm mt-1">
-            pendant {plan.promoLength} mois, puis {plan.regularPrice.toFixed(2)}€/mois
-          </p>
-        )}
-      </div>
-    </div>
+    React.createElement("div", { className: "pack-card" },
+      React.createElement("div", { className: "pack-header" },
+        isInternet ? "L'essentiel de la Fibre" : "Le mobile à prix attractif"
+      ),
+      React.createElement("div", { className: "pack-title" }, plan.name),
+      React.createElement("ul", { className: "pack-features" },
+        plan.features.map((feature, index) =>
+          React.createElement("li", { key: index }, feature)
+        )
+      ),
+      React.createElement("div", { className: "pack-price" },
+        `${plan.price.toFixed(2)}€`,
+        React.createElement("span", { className: "pack-price-period" }, "/mois")
+      ),
+      isInternet && React.createElement("div", { className: "pack-promo" },
+        `pendant ${plan.promoLength} mois, puis ${plan.regularPrice.toFixed(2)}€/mois`
+      )
+    )
   );
 
-  return (
-    <div className="max-w-6xl mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
-        {/* Internet Plans */}
-        <div className="md:col-span-2">
-          <h4 className="text-lg font-bold mb-4">Choisissez votre abonnement internet</h4>
-          <div className="relative">
-            <PlanCard plan={selectedInternetPlan} isInternet={true} />
-            <div className="absolute inset-y-0 left-0 flex items-center">
-              <button 
-                onClick={() => setSelectedInternet((prev) => prev > 0 ? prev - 1 : internetPlans.length - 1)}
-                className="bg-white shadow-md rounded-full p-2 -ml-3"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="absolute inset-y-0 right-0 flex items-center">
-              <button 
-                onClick={() => setSelectedInternet((prev) => (prev + 1) % internetPlans.length)}
-                className="bg-white shadow-md rounded-full p-2 -mr-3"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Plus Sign */}
-        <div className="md:col-span-1 flex justify-center items-center text-4xl font-bold">
-          +
-        </div>
-
-        {/* Mobile Plans */}
-        <div className="md:col-span-2">
-          <h4 className="text-lg font-bold mb-4">Choisissez votre forfait mobile</h4>
-          <div className="relative">
-            <PlanCard plan={selectedMobilePlan} isInternet={false} />
-            <div className="absolute inset-y-0 left-0 flex items-center">
-              <button 
-                onClick={() => setSelectedMobile((prev) => prev > 0 ? prev - 1 : mobilePlans.length - 1)}
-                className="bg-white shadow-md rounded-full p-2 -ml-3"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="absolute inset-y-0 right-0 flex items-center">
-              <button 
-                onClick={() => setSelectedMobile((prev) => (prev + 1) % mobilePlans.length)}
-                className="bg-white shadow-md rounded-full p-2 -mr-3"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Equals Sign */}
-        <div className="md:col-span-1 flex justify-center items-center text-4xl font-bold">
-          =
-        </div>
-
-        {/* Total */}
-        <div className="md:col-span-1">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h4 className="font-bold text-lg mb-4">VOTRE AVANTAGE 100% ORANGE</h4>
-            <div className="text-3xl font-bold text-orange-500 mb-4">
-              -{selectedMobilePlan.discount}€<span className="text-lg">/mois</span>
-            </div>
-            <div>
-              <h4 className="font-bold mb-2">Soit au total :</h4>
-              <div className="text-3xl font-bold">
-                {totalPrice.toFixed(2)}€<span className="text-sm">/mois</span>
-              </div>
-              <p className="text-sm mt-1">
-                pendant {selectedInternetPlan.promoLength} mois,
-                <br />puis {regularTotalPrice.toFixed(2)}€/mois
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  return React.createElement("div", { className: "pack-selector-container" },
+    React.createElement("div", { className: "pack-selector-grid" },
+      React.createElement("div", { style: { position: 'relative' } },
+        React.createElement("h4", { style: { marginBottom: '16px', fontWeight: 'bold' } },
+          "Choisissez votre abonnement internet"
+        ),
+        React.createElement(PlanCard, { plan: selectedInternetPlan, isInternet: true }),
+        React.createElement("button", {
+          className: "nav-button nav-button-left",
+          onClick: () => setSelectedInternet(prev => prev > 0 ? prev - 1 : internetPlans.length - 1)
+        }, "←"),
+        React.createElement("button", {
+          className: "nav-button nav-button-right",
+          onClick: () => setSelectedInternet(prev => (prev + 1) % internetPlans.length)
+        }, "→")
+      ),
+      React.createElement("div", { className: "operator" }, "+"),
+      React.createElement("div", { style: { position: 'relative' } },
+        React.createElement("h4", { style: { marginBottom: '16px', fontWeight: 'bold' } },
+          "Choisissez votre forfait mobile"
+        ),
+        React.createElement(PlanCard, { plan: selectedMobilePlan, isInternet: false }),
+        React.createElement("button", {
+          className: "nav-button nav-button-left",
+          onClick: () => setSelectedMobile(prev => prev > 0 ? prev - 1 : mobilePlans.length - 1)
+        }, "←"),
+        React.createElement("button", {
+          className: "nav-button nav-button-right",
+          onClick: () => setSelectedMobile(prev => (prev + 1) % mobilePlans.length)
+        }, "→")
+      ),
+      React.createElement("div", { className: "operator" }, "="),
+      React.createElement("div", { className: "total-card" },
+        React.createElement("div", { className: "total-header" },
+          "VOTRE AVANTAGE 100% ORANGE"
+        ),
+        React.createElement("div", { className: "total-discount" },
+          `-${selectedMobilePlan.discount}€/mois`
+        ),
+        React.createElement("div", null,
+          React.createElement("div", { style: { fontWeight: 'bold', marginBottom: '8px' } },
+            "Soit au total :"
+          ),
+          React.createElement("div", { className: "total-price" },
+            `${totalPrice.toFixed(2)}€/mois`
+          ),
+          React.createElement("div", { className: "total-details" },
+            `pendant ${selectedInternetPlan.promoLength} mois,`,
+            React.createElement("br"),
+            `puis ${regularTotalPrice.toFixed(2)}€/mois`
+          )
+        )
+      )
+    )
   );
 };
-
-export default PackSelector;

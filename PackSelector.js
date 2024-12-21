@@ -21,7 +21,7 @@ const PackSelector = () => {
       }
 
       .section-title {
-        color: #666666; /* Changed to grey */
+        color: #999999;
         font-size: 28px;
         margin-bottom: 24px;
         font-weight: 700;

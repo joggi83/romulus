@@ -33,7 +33,7 @@ const PackSelector = () => {
         background: #161616;
         border-radius: 16px;
         padding: 32px;
-        height: 460px;
+        height: 520px; /* Increased height */
         position: relative;
         border: 1px solid #333333;
         display: flex;
@@ -59,19 +59,26 @@ const PackSelector = () => {
         color: #ffffff;
         text-align: center;
         line-height: 1.4;
+        min-height: 72px; /* Fixed height for title */
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .pack-features {
         margin-bottom: 32px;
+        flex-grow: 1;
+        overflow-y: auto; /* Allow scrolling if content overflows */
       }
       
       .pack-features li {
         margin-bottom: 16px;
         display: flex;
-        align-items: center;
+        align-items: flex-start; /* Changed from center to flex-start */
         color: #cccccc;
         font-size: 16px;
         line-height: 1.6;
+        padding-right: 10px;
       }
       
       .pack-features li:before {
@@ -79,6 +86,7 @@ const PackSelector = () => {
         margin-right: 12px;
         color: #FF6600;
         font-size: 20px;
+        flex-shrink: 0;
       }
       
       .pack-price {
@@ -88,6 +96,7 @@ const PackSelector = () => {
         text-align: center;
         margin-top: auto;
         line-height: 1.4;
+        flex-shrink: 0; /* Prevent price from shrinking */
       }
       
       .pack-price-period {
@@ -102,6 +111,7 @@ const PackSelector = () => {
         color: #cccccc;
         text-align: center;
         line-height: 1.5;
+        flex-shrink: 0; /* Prevent promo text from shrinking */
       }
       
       .nav-button {
@@ -209,7 +219,11 @@ const PackSelector = () => {
 
         .pack-card {
           height: auto;
-          min-height: 460px;
+          min-height: 520px;
+        }
+
+        .pack-title {
+          min-height: auto;
         }
       }
     `;

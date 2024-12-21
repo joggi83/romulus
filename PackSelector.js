@@ -139,46 +139,53 @@ const PackSelector = () => {
       .total-card {
         background: #161616;
         border-radius: 16px;
-        padding: 32px;
-        border: 1px solid #333333;
+        padding: 40px;
+        border: 2px solid #FF6600;
+        box-shadow: 0 4px 12px rgba(255, 102, 0, 0.2);
+        transform: scale(1.05);
       }
       
       .total-header {
-        font-size: 22px;
-        font-weight: 700;
-        margin-bottom: 24px;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 30px;
         color: #ffffff;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
       
       .total-discount {
-        font-size: 36px;
-        font-weight: 700;
+        font-size: 48px;
+        font-weight: 800;
         color: #FF6600;
-        margin-bottom: 24px;
+        margin-bottom: 30px;
         text-align: center;
+        text-shadow: 0 2px 4px rgba(255, 102, 0, 0.3);
       }
       
       .total-price {
-        font-size: 36px;
-        font-weight: 700;
+        font-size: 42px;
+        font-weight: 800;
         color: #FF6600;
         text-align: center;
+        margin: 8px 0;
       }
       
       .total-details {
-        font-size: 16px;
-        margin-top: 12px;
+        font-size: 18px;
+        margin-top: 16px;
         color: #cccccc;
         text-align: center;
+        line-height: 1.5;
       }
 
       .total-label {
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
         color: #ffffff;
         text-align: center;
-        font-size: 18px;
+        font-size: 20px;
       }
       
       @media (max-width: 768px) {

@@ -26,6 +26,7 @@ const PackSelector = () => {
         margin-bottom: 24px;
         font-weight: 700;
         text-align: center;
+        line-height: 1.4;
       }
       
       .pack-card {
@@ -48,6 +49,7 @@ const PackSelector = () => {
         font-size: 16px;
         font-weight: 700;
         text-align: center;
+        line-height: 1.4;
       }
       
       .pack-title {
@@ -56,6 +58,7 @@ const PackSelector = () => {
         margin-bottom: 24px;
         color: #ffffff;
         text-align: center;
+        line-height: 1.4;
       }
       
       .pack-features {
@@ -68,6 +71,7 @@ const PackSelector = () => {
         align-items: center;
         color: #cccccc;
         font-size: 16px;
+        line-height: 1.6;
       }
       
       .pack-features li:before {
@@ -83,6 +87,7 @@ const PackSelector = () => {
         color: #FF6600;
         text-align: center;
         margin-top: auto;
+        line-height: 1.4;
       }
       
       .pack-price-period {
@@ -96,6 +101,7 @@ const PackSelector = () => {
         margin-top: 12px;
         color: #cccccc;
         text-align: center;
+        line-height: 1.5;
       }
       
       .nav-button {
@@ -153,6 +159,7 @@ const PackSelector = () => {
         text-align: center;
         text-transform: uppercase;
         letter-spacing: 1px;
+        line-height: 1.4;
       }
       
       .total-discount {
@@ -162,6 +169,7 @@ const PackSelector = () => {
         margin-bottom: 30px;
         text-align: center;
         text-shadow: 0 2px 4px rgba(255, 102, 0, 0.3);
+        line-height: 1.2;
       }
       
       .total-price {
@@ -170,6 +178,7 @@ const PackSelector = () => {
         color: #FF6600;
         text-align: center;
         margin: 8px 0;
+        line-height: 1.3;
       }
       
       .total-details {
@@ -186,6 +195,7 @@ const PackSelector = () => {
         color: #ffffff;
         text-align: center;
         font-size: 20px;
+        line-height: 1.4;
       }
       
       @media (max-width: 768px) {

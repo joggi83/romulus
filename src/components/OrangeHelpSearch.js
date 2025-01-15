@@ -1,144 +1,183 @@
-// src/components/OrangeHelpSearch.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, X } from 'lucide-react';
 
-const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
+const OrangeHelpSearch = () => {
   const [query, setQuery] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef(null);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    // Gestionnaire de clic en dehors pour fermer les suggestions
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const fetchSuggestions = async (input) => {
+    try {
+      const response = await fetch('https://europe-west1-romulus-441319.cloudfunctions.net/getAutocompleteSuggestions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: input,
+          projectId: 'romulus-441319',
+          location: 'europe-west1',
+          indexId: 'orange-help-index'
+        })
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+      const data = await response.json();
+      setSuggestions(data.suggestions || []);
+      setShowSuggestions(true);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSearch = async () => {
     if (!query.trim()) return;
     
     setLoading(true);
-    try {
-      const response = await fetch(searchEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      });
-      
-      const data = await response.json();
-      setAnswer(data.answer);
-    } catch (error) {
-      console.error('Search error:', error);
-      setAnswer('Désolé, une erreur est survenue lors de la recherche.');
-    }
-    setLoading(false);
+    setSearchResults(null);
     setShowSuggestions(false);
+
+    try {
+      const response = await fetch('https://europe-west1-romulus-441319.cloudfunctions.net/searchVertexAI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: query,
+          projectId: 'romulus-441319',
+          location: 'europe-west1',
+          indexId: 'orange-help-index'
+        })
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Error searching:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleInputChange = async (e) => {
+  const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
     if (value.length >= 3) {
-      try {
-        const response = await fetch(autocompleteEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: value }),
-        });
-        
-        const data = await response.json();
-        setSuggestions(data.suggestions);
-        setShowSuggestions(true);
-      } catch (error) {
-        console.error('Autocomplete error:', error);
-      }
+      fetchSuggestions(value);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
     }
   };
 
-  const inputStyles = {
-    color: 'white !important',
-    caretColor: 'white'
+  const handleSuggestionClick = (suggestion) => {
+    setQuery(suggestion);
+    setShowSuggestions(false);
+    // Déclencher la recherche avec la suggestion
+    handleSearch();
   };
 
   return (
-    <div className="brix---cta-section" style={{
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}>
-      <div className="brix---container-default-2 w-container">
-        <div className="w-layout-grid brix---grid-cta-v4">
-          <div className="brix---mg-bottom-24px">
-            <div className="brix---color-neutral-100">
-              <h2 className="brix---heading-h2-size-2">
-                Vous avez besoin d'aide ?
-              </h2>
-            </div>
-          </div>
-          
-          <div className="brix---mg-bottom-32px-2">
-            <form onSubmit={handleSearch} className="brix---position-relative">
-              <style>
-                {`
-                  .white-input {
-                    color: white !important;
-                  }
-                  .white-input::placeholder {
-                    color: rgba(255, 255, 255, 0.7) !important;
-                  }
-                  .white-input:focus {
-                    color: white !important;
-                  }
-                  .brix---input-large-button-inside {
-                    color: white !important;
-                  }
-                  .brix---input-large-button-inside::placeholder {
-                    color: rgba(255, 255, 255, 0.7) !important;
-                  }
-                `}
-              </style>
-              <input
-                type="text"
-                className="brix---input-large-button-inside w-input white-input"
-                placeholder="Saisissez votre demande"
-                value={query}
-                onChange={handleInputChange}
-                style={inputStyles}
-              />
-              <button 
-                type="submit"
-                className="brix---btn-primary-small-input w-button"
-                disabled={loading}
-              >
-                {loading ? 'Recherche...' : 'Chercher'}
-              </button>
-              
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className="p-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => {
-                        setQuery(suggestion);
-                        setShowSuggestions(false);
-                      }}
-                    >
-                      {suggestion}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </form>
-          </div>
-          
-          {answer && (
-            <div className="mt-6 p-4 bg-white rounded-lg shadow">
-              <div className="prose max-w-none">
-                {answer}
-              </div>
-            </div>
+    <div className="max-w-4xl mx-auto p-4" ref={searchRef}>
+      <div className="relative">
+        {/* Barre de recherche */}
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            value={query}
+            onChange={handleInputChange}
+            placeholder="Comment pouvons-nous vous aider ?"
+            className="w-full p-4 pr-12 text-lg border rounded-lg focus:outline-none focus:border-orange-500"
+          />
+          {query && (
+            <button
+              onClick={() => {
+                setQuery('');
+                setSuggestions([]);
+                setSearchResults(null);
+              }}
+              className="absolute right-14 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
           )}
+          <button
+            onClick={handleSearch}
+            className="absolute right-4 text-orange-500 hover:text-orange-600"
+            disabled={loading}
+          >
+            <Search size={20} />
+          </button>
         </div>
+
+        {/* Suggestions */}
+        {showSuggestions && suggestions.length > 0 && (
+          <div className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg">
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="p-3 hover:bg-gray-100 cursor-pointer"
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Résultats de recherche */}
+      {loading && (
+        <div className="mt-8 text-center text-gray-600">
+          Recherche en cours...
+        </div>
+      )}
+
+      {searchResults && (
+        <div className="mt-8 space-y-6">
+          {searchResults.results?.map((result, index) => (
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {result.title}
+              </h3>
+              <p className="text-gray-600 mb-4">{result.content}</p>
+              {result.imageUrl && (
+                <img 
+                  src={result.imageUrl} 
+                  alt={result.title}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              )}
+              {result.link && (
+                <a 
+                  href={result.link}
+                  className="inline-block mt-4 text-orange-500 hover:text-orange-600"
+                >
+                  En savoir plus →
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

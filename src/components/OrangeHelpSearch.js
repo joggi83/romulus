@@ -1,4 +1,3 @@
-// src/components/OrangeHelpSearch.js
 import React, { useState } from 'react';
 
 const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
@@ -33,7 +32,6 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
   const handleInputChange = async (e) => {
     const value = e.target.value;
     setQuery(value);
-
     if (value.length >= 3) {
       try {
         const response = await fetch(autocompleteEndpoint, {
@@ -55,7 +53,11 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
   };
 
   return (
-    <div className="brix---cta-section">
+    <div className="brix---cta-section" style={{
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
       <div className="brix---container-default-2 w-container">
         <div className="w-layout-grid brix---grid-cta-v4">
           <div className="brix---mg-bottom-24px">
@@ -74,6 +76,10 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
                 placeholder="Saisissez votre demande"
                 value={query}
                 onChange={handleInputChange}
+                style={{
+                  color: 'white',
+                  caretColor: 'white'
+                }}
               />
               <button 
                 type="submit"
@@ -115,10 +121,4 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
   );
 };
 
-// Export pour webpack/bundler
 export default OrangeHelpSearch;
-
-// Export pour utilisation directe via CDN
-if (typeof window !== 'undefined') {
-  window.OrangeHelpSearch = OrangeHelpSearch;
-}

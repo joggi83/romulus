@@ -1,4 +1,5 @@
 // src/index.js
+import React from 'react';
 import OrangeHelpSearch from './components/OrangeHelpSearch';
 
 // Export pour webpack/bundler

@@ -1,3 +1,4 @@
+// src/components/OrangeHelpSearch.js
 import React, { useState } from 'react';
 
 const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
@@ -52,6 +53,11 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
     }
   };
 
+  const inputStyles = {
+    color: 'white !important',
+    caretColor: 'white'
+  };
+
   return (
     <div className="brix---cta-section" style={{
       backgroundSize: 'cover',
@@ -70,16 +76,32 @@ const OrangeHelpSearch = ({ searchEndpoint, autocompleteEndpoint }) => {
           
           <div className="brix---mg-bottom-32px-2">
             <form onSubmit={handleSearch} className="brix---position-relative">
+              <style>
+                {`
+                  .white-input {
+                    color: white !important;
+                  }
+                  .white-input::placeholder {
+                    color: rgba(255, 255, 255, 0.7) !important;
+                  }
+                  .white-input:focus {
+                    color: white !important;
+                  }
+                  .brix---input-large-button-inside {
+                    color: white !important;
+                  }
+                  .brix---input-large-button-inside::placeholder {
+                    color: rgba(255, 255, 255, 0.7) !important;
+                  }
+                `}
+              </style>
               <input
                 type="text"
-                className="brix---input-large-button-inside w-input"
+                className="brix---input-large-button-inside w-input white-input"
                 placeholder="Saisissez votre demande"
                 value={query}
                 onChange={handleInputChange}
-                style={{
-                  color: 'white',
-                  caretColor: 'white'
-                }}
+                style={inputStyles}
               />
               <button 
                 type="submit"

@@ -1,11 +1,11 @@
-// src/index.js
 import React from 'react';
 import OrangeHelpSearch from './components/OrangeHelpSearch';
 
-// Export pour webpack/bundler
-export default OrangeHelpSearch;
+// Pour s'assurer que le composant est correctement exporté pour l'utilisation CDN
+const Component = OrangeHelpSearch;
+export default Component;
 
-// Export pour utilisation directe via CDN
+// Export explicite pour l'utilisation via CDN
 if (typeof window !== 'undefined') {
-  window.OrangeHelpSearch = OrangeHelpSearch;
+  window.OrangeHelpSearch = Component;
 }

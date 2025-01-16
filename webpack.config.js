@@ -1,4 +1,3 @@
-// webpack.config.js
 const path = require('path');
 
 module.exports = {
@@ -6,14 +5,26 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    libraryTarget: 'umd',
-    library: 'OrangeHelpSearch',
-    libraryExport: 'default',
+    library: {
+      name: 'OrangeHelpSearch',
+      type: 'umd',
+      export: 'default',
+    },
     globalObject: 'this'
   },
   externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM'
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react'
+    },
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom'
+    }
   },
   module: {
     rules: [

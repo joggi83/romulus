@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Send, Loader } from 'lucide-react';
 
 const OrangeHelpSearch = ({ searchEndpoint }) => {
   const [query, setQuery] = useState('');
@@ -46,7 +45,7 @@ const OrangeHelpSearch = ({ searchEndpoint }) => {
       setChatHistory(prev => [
         ...prev,
         { role: 'user', content: query },
-        { role: 'assistant', content: data.response }
+        { role: 'assistant', content: data.results[0].content }
       ]);
       
       setQuery('');
@@ -65,49 +64,51 @@ const OrangeHelpSearch = ({ searchEndpoint }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
-      {/* Barre de recherche initiale */}
-      {chatHistory.length === 0 && (
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            Comment pouvons-nous vous aider ?
-          </h2>
-          <div className="relative">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Posez votre question..."
-              className="w-full p-4 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:border-orange-500"
-              onKeyPress={handleKeyPress}
-            />
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-orange-500 hover:text-orange-600 disabled:opacity-50"
-            >
-              {loading ? <Loader className="animate-spin" /> : <Search />}
-            </button>
-          </div>
+    <div>
+      {/* Zone de recherche avec image de fond */}
+      <div 
+        className="p-12 bg-cover bg-center bg-no-repeat" 
+        style={{
+          backgroundImage: 'url("https://cdn.prod.website-files.com/67640e44deef7bb709db19df/67854c8fd33580f69ddc00a2_4133170.jpg")',
+          minHeight: '300px'
+        }}
+      >
+        <h2 className="text-4xl font-bold text-white mb-8">
+          Vous avez besoin d'aide ?
+        </h2>
+        <div className="relative max-w-4xl mx-auto">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Posez votre question..."
+            className="w-full p-4 pr-12 rounded-lg bg-black bg-opacity-50 text-white placeholder-white border border-white focus:outline-none focus:border-orange-500"
+            onKeyPress={handleKeyPress}
+          />
+          <button
+            onClick={handleSearch}
+            disabled={loading}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50"
+          >
+            {loading ? "..." : "Chercher"}
+          </button>
         </div>
-      )}
+      </div>
 
       {/* Zone de chat */}
       {chatHistory.length > 0 && (
-        <div className="flex flex-col h-full">
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="max-w-4xl mx-auto mt-6 p-6 bg-black bg-opacity-90">
+          <div className="space-y-6">
             {chatHistory.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                }`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
                   className={`max-w-3/4 p-4 rounded-lg ${
                     message.role === 'user'
                       ? 'bg-orange-500 text-white'
-                      : 'bg-gray-100 text-gray-800'
+                      : 'bg-opacity-10 bg-white text-white'
                   }`}
                 >
                   {message.content}
@@ -118,22 +119,22 @@ const OrangeHelpSearch = ({ searchEndpoint }) => {
           </div>
 
           {/* Zone de saisie */}
-          <div className="border-t p-4">
+          <div className="mt-6">
             <div className="relative">
               <textarea
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Tapez votre message..."
-                className="w-full p-3 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:border-orange-500 resize-none"
+                className="w-full p-4 pr-12 rounded-lg bg-black bg-opacity-50 text-white placeholder-white border border-white focus:outline-none focus:border-orange-500 resize-none"
                 rows="2"
               />
               <button
                 onClick={handleSearch}
                 disabled={loading}
-                className="absolute right-3 bottom-3 p-2 text-orange-500 hover:text-orange-600 disabled:opacity-50"
+                className="absolute right-3 bottom-3 px-4 py-1 bg-orange-500 text-white rounded hover:bg-orange-600 disabled:opacity-50"
               >
-                {loading ? <Loader className="animate-spin" /> : <Send />}
+                {loading ? "..." : "Envoyer"}
               </button>
             </div>
           </div>
@@ -142,7 +143,7 @@ const OrangeHelpSearch = ({ searchEndpoint }) => {
 
       {/* Message d'erreur */}
       {error && (
-        <div className="p-4 mb-4 text-red-500 bg-red-50 rounded">
+        <div className="max-w-4xl mx-auto mt-4 p-4 bg-red-500 text-white rounded">
           {error}
         </div>
       )}
